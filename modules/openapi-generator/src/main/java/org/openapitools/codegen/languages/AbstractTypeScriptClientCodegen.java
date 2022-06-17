@@ -166,12 +166,12 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
         typeMapping.put("date", "string");
         typeMapping.put("DateTime", "string");
         typeMapping.put("binary", "any");
-        typeMapping.put("File", "any");
+        typeMapping.put("File", "Blob");
         typeMapping.put("file", "any");
         typeMapping.put("ByteArray", "string");
         typeMapping.put("UUID", "string");
         typeMapping.put("URI", "string");
-        typeMapping.put("Error", "Error");
+        typeMapping.put("NativeError", "Error");
         typeMapping.put("AnyType", "any");
 
         cliOptions.add(new CliOption(CodegenConstants.ENUM_NAME_SUFFIX, CodegenConstants.ENUM_NAME_SUFFIX_DESC).defaultValue(this.enumSuffix));

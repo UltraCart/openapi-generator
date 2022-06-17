@@ -103,6 +103,17 @@ class ApiClient {
 
     }
 
+    usingApiKey(apiKey, verifySsl = true){
+      if(!verifySsl){
+        // -- development code to work with UltraCart test servers.
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+        // -- end of development code
+      }
+      this.authentications['ultraCartSimpleApiKey'].apiKey = apiKey;
+      this.defaultHeaders["X-UltraCart-Api-Version"] = "2017-03-01";
+    }
+
+
     {{#emitJSDoc}}/**
     * Returns a string representation for an actual parameter.
     * @param param The actual parameter.

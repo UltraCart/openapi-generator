@@ -12,6 +12,7 @@ export interface ConfigurationParameters {
     username?: string; // parameter for basic security
     password?: string; // parameter for basic security
     apiKey?: string | ((name: string) => string); // parameter for apiKey security
+    apiVersion?: string;
     accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string | Promise<string>); // parameter for oauth2 security
     headers?: HTTPHeaders; //header params we want to use on every request
     credentials?: RequestCredentials; //value for the credentials param we want to use on each request
@@ -19,6 +20,13 @@ export interface ConfigurationParameters {
 
 export class Configuration {
     constructor(private configuration: ConfigurationParameters = {}) {}
+
+  /**
+   * parameter for apiVersion
+   * @param name apiVersion name
+   * @memberof Configuration
+   */
+    apiVersion?: string;
 
     set config(configuration: Configuration) {
         this.configuration = configuration;
@@ -122,6 +130,10 @@ export class BaseAPI {
 
         const headers = Object.assign({}, this.configuration.headers, context.headers);
         Object.keys(headers).forEach(key => headers[key] === undefined ? delete headers[key] : {});
+
+        if (this.configuration && this.configuration.configuration && this.configuration.configuration.apiVersion) {
+            headers["X-UltraCart-Api-Version"] = this.configuration.configuration.apiVersion;
+        }
 
         const initOverrideFn =
             typeof initOverrides === "function"

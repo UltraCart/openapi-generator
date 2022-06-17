@@ -41,6 +41,11 @@ module {{moduleName}}
     #   config.api_key_prefix['api_key'] = 'Token'
     attr_accessor :api_key_prefix
 
+    # Defines the api version
+    #
+    # @return [String]
+    attr_accessor :api_version
+
     # Defines the username used with HTTP basic authentication.
     #
     # @return [String]
@@ -195,7 +200,9 @@ module {{moduleName}}
             type: 'api_key',
             in: {{#isKeyInHeader}}'header'{{/isKeyInHeader}}{{#isKeyInQuery}}'query'{{/isKeyInQuery}},
             key: '{{keyParamName}}',
-            value: api_key_with_prefix('{{name}}'{{#vendorExtensions.x-auth-id-alias}}, '{{.}}'{{/vendorExtensions.x-auth-id-alias}})
+# The original openapi source had the following.  We've changed that to match the swagger code. - Perry 6/2022
+#            value: api_key_with_prefix('{{name}}'{{#vendorExtensions.x-auth-id-alias}}, '{{.}}'{{/vendorExtensions.x-auth-id-alias}})
+            value: api_key_with_prefix('{{keyParamName}}')
           },
 {{/isApiKey}}
 {{#isBasic}}

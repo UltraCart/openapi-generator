@@ -16,6 +16,13 @@
  * Do not edit the class manually.
  */
 
+/**
+ * UltraCart specific changes:
+ * 1. added a helper method to automatically set the version header since that's a pain.
+ * 2. added a helper method to use an API key painlessly as well.
+ * 3. modified all calls to call a retry statement that will retry once if the UltraCart rate-limiter invokes.
+ */
+
 namespace {{apiPackage}};
 
 use GuzzleHttp\Client;
@@ -97,6 +104,24 @@ use {{invokerPackage}}\ObjectSerializer;
     {
         return $this->hostIndex;
     }
+
+    // -- UltraCart Specific Start --
+    /**
+     * @param string $simple_key api key
+     * @param int $max_retry_seconds 0 to disable, else the maximum number of seconds to wait and automatically retry when rate limit is hit
+     * @param string $verify passed to Guzzle to enable/disable ssl verify
+     */
+    public static function usingApiKey( $simple_key, $max_retry_seconds = 0, $verify = true, $debug = false) {
+        $config = new Configuration();
+        $config->setApiKey('x-ultracart-simple-key', $simple_key);
+        $config->setMaxRetrySeconds($max_retry_seconds);
+
+        $client = new Client(['debug' => $debug, 'verify' => $verify]);
+        $headerSelector = new HeaderSelector(/* leave null for version tied to this sdk version */);
+        $api = new {{classname}}($client, $config, $headerSelector);
+        return $api;
+    }
+    // -- UltraCart Specific End --
 
     /**
      * @return Configuration
@@ -185,6 +210,50 @@ use {{invokerPackage}}\ObjectSerializer;
      */
     public function {{operationId}}WithHttpInfo({{^vendorExtensions.x-group-parameters}}{{#allParams}}${{paramName}}{{^required}} = {{{defaultValue}}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{^-last}}, {{/-last}}{{/allParams}}{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}$associative_array{{/vendorExtensions.x-group-parameters}})
     {
+        {{#returnType}}return {{/returnType}}$this->{{operationId}}WithHttpInfoRetry(true {{^vendorExtensions.x-group-parameters}}{{#allParams}}{{#-first}}, {{/-first}}  ${{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}$associative_array{{/vendorExtensions.x-group-parameters}});
+    }
+
+
+
+    /**
+     * Operation {{{operationId}}}WithHttpInfoRetry
+{{#summary}}
+     *
+     * {{.}}
+{{/summary}}
+     *
+{{#description}}
+     * {{.}}
+     *
+{{/description}}
+{{#vendorExtensions.x-group-parameters}}
+     * Note: the input parameter is an associative array with the keys listed as the parameter name below
+     *
+{{/vendorExtensions.x-group-parameters}}
+{{#servers}}
+{{#-first}}
+     * This operation contains host(s) defined in the OpenAP spec. Use 'hostIndex' to select the host.
+{{/-first}}
+     * URL: {{{url}}}
+{{#-last}}
+     *
+{{/-last}}
+{{/servers}}
+     * @param boolean $retry should this method retry the call if a rate limit is triggered (required)
+{{#allParams}}
+     * @param  {{{dataType}}} ${{paramName}}{{#description}} {{.}}{{/description}} {{#required}}(required){{/required}}{{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}{{#isDeprecated}} (deprecated){{/isDeprecated}}
+{{/allParams}}
+     *
+     * @throws \{{invokerPackage}}\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of {{#returnType}}{{#responses}}{{#dataType}}{{^-first}}|{{/-first}}{{/dataType}}{{{dataType}}}{{/responses}}{{/returnType}}{{^returnType}}null{{/returnType}}, HTTP status code, HTTP response headers (array of strings)
+    {{#isDeprecated}}
+     * @deprecated
+    {{/isDeprecated}}
+     */
+    public function {{operationId}}WithHttpInfoRetry($retry {{^vendorExtensions.x-group-parameters}}{{#allParams}}{{#-first}}, {{/-first}}${{paramName}}{{^required}} = {{{defaultValue}}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{^-last}}, {{/-last}}{{/allParams}}{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}$associative_array{{/vendorExtensions.x-group-parameters}})
+    {
+        $returnType = '{{returnType}}';
         $request = $this->{{operationId}}Request({{^vendorExtensions.x-group-parameters}}{{#allParams}}${{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}$associative_array{{/vendorExtensions.x-group-parameters}});
 
         try {
@@ -192,6 +261,23 @@ use {{invokerPackage}}\ObjectSerializer;
             try {
                 $response = $this->client->send($request, $options);
             } catch (RequestException $e) {
+
+                if($e->getResponse()) {
+                    $response = $e->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    $retryAfter = 0;
+                    $headers = $response->getHeaders();
+                    if (array_key_exists('Retry-After', $headers)) {
+                        $retryAfter = intval($headers['Retry-After'][0]);
+                    }
+
+                    if ($statusCode == 429 && $retry && $retryAfter > 0 && $retryAfter <= $this->config->getMaxRetrySeconds()) {
+                        sleep($retryAfter);
+                        {{#returnType}}return {{/returnType}}$this->{{operationId}}WithHttpInfoRetry(false {{^vendorExtensions.x-group-parameters}}{{#allParams}}{{#-first}}, {{/-first}}  ${{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}$associative_array{{/vendorExtensions.x-group-parameters}});
+                    }
+                }
+
+
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
                     (int) $e->getCode(),
@@ -230,7 +316,7 @@ use {{invokerPackage}}\ObjectSerializer;
             {{#dataType}}
                 {{^isWildcard}}case {{code}}:{{/isWildcard}}{{#isWildcard}}default:{{/isWildcard}}
                     if ('{{{dataType}}}' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody()->getContents(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ('{{dataType}}' !== 'string') {
@@ -251,7 +337,7 @@ use {{invokerPackage}}\ObjectSerializer;
 
             $returnType = '{{{returnType}}}';
             if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
+                $content = $response->getBody()->getContents()(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
@@ -288,6 +374,9 @@ use {{invokerPackage}}\ObjectSerializer;
             throw $e;
         }
     }
+
+
+
 
     /**
      * Operation {{{operationId}}}Async
@@ -378,7 +467,7 @@ use {{invokerPackage}}\ObjectSerializer;
                 function ($response) use ($returnType) {
                     {{#returnType}}
                     if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
+                        $content = $response->getBody()->getContents(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
                         if ($returnType !== 'string') {

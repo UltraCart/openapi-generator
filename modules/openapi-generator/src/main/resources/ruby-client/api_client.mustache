@@ -203,6 +203,13 @@ module {{moduleName}}
       @default_headers['User-Agent'] = @user_agent
     end
 
+    # Return api version header based on the configuration and default
+    # @return [String] the api_version header (e.g. '2017-03-01')
+    def select_header_api_version()
+      return '2017-03-01' if @config.api_version.nil?
+      @config.api_version
+    end
+
     # Return Accept header based on an array of accepts provided.
     # @param [Array] accepts array for Accept
     # @return [String] the Accept header (e.g. application/json)
