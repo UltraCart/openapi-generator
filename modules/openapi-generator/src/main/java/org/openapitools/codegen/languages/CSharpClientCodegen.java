@@ -695,38 +695,38 @@ public class CSharpClientCodegen extends AbstractCSharpCodegen {
             case NET35:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("105.1.0", "net35"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "net35"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "net35"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "net35"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "net35"));
                 break;
             case NET40:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("105.1.0", "net4"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "net40"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "net40"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "net40"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "net40"));
                 break;
             case NET45:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("105.1.0", "net45"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "net45"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "net45"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "net45"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "net45"));
                 break;
             case NET452:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("106.10.1", "net452"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "net45"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "net45"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "net45"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "net45"));
                 additionalProperties.put("isRestSharp_106_10_1_above", true);
                 break;
             case UWP:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("105.1.0", "uwp"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "uwp"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "uwp"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "uwp"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "uwp"));
                 break;
             case NETSTANDARD:
                 additionalProperties.put(RESTSHARP, new LibraryDependency("105.1.0", "netstandard1.3"));
                 additionalProperties.put(JSON_SUBTYPES, new LibraryDependency("1.6.0", "netstandard1.3"));
-                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("12.0.3", "netstandard1.3"));
+                additionalProperties.put(NEWTONSOFT_JSON, new LibraryDependency("13.0.1", "netstandard1.3"));
                 additionalProperties.put(NUNIT, new LibraryDependency("3.11.0", "netstandard1.3"));
                 break;
         }

@@ -23,9 +23,8 @@
         {{#termsOfService}}
         <copyright>{{.}}</copyright>
         {{/termsOfService}}
-        {{#licenseUrl}}
-        <licenseUrl>{{.}}</licenseUrl>
-        {{/licenseUrl}}
+        <icon>images\ultracart-icon-fill-blue.png</icon>
+        <license type="expression">MIT</license>
 
         <!-- Dependencies are automatically installed when the package is installed -->
         <dependencies>
@@ -43,8 +42,9 @@
     <files>
 
         <!-- A readme.txt will be displayed when the package is installed -->
-        <file src="..\..\README.md" target="" />
+        <file src="..\..\README.md" target="docs" />
         <file src="..\..\docs\**\*.*" target="docs" />
+        <file src="..\..\ultracart-icon-fill-blue.png" target="images\" />
         {{#generatePropertyChanged}}
         <file src="..\..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets" target="build" />
         {{/generatePropertyChanged}}

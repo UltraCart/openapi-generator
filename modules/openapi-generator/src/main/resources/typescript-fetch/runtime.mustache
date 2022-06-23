@@ -3,6 +3,7 @@
 {{>licenseInfo}}
 
 export const BASE_PATH = "{{{basePath}}}".replace(/\/+$/, "");
+export const API_VERSION = "2017-03-01";
 
 export interface ConfigurationParameters {
     basePath?: string; // override base path
@@ -21,15 +22,12 @@ export interface ConfigurationParameters {
 export class Configuration {
     constructor(private configuration: ConfigurationParameters = {}) {}
 
-  /**
-   * parameter for apiVersion
-   * @param name apiVersion name
-   * @memberof Configuration
-   */
-    apiVersion?: string;
-
     set config(configuration: Configuration) {
         this.configuration = configuration;
+    }
+
+    get apiVersion(): string {
+       return this.configuration.apiVersion != null ? this.configuration.apiVersion : API_VERSION;
     }
 
     get basePath(): string {
@@ -130,10 +128,7 @@ export class BaseAPI {
 
         const headers = Object.assign({}, this.configuration.headers, context.headers);
         Object.keys(headers).forEach(key => headers[key] === undefined ? delete headers[key] : {});
-
-        if (this.configuration && this.configuration.configuration && this.configuration.configuration.apiVersion) {
-            headers["X-UltraCart-Api-Version"] = this.configuration.configuration.apiVersion;
-        }
+        headers["X-UltraCart-Api-Version"] = this.configuration.apiVersion;
 
         const initOverrideFn =
             typeof initOverrides === "function"
