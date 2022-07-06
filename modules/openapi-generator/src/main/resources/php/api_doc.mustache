@@ -24,14 +24,15 @@ Method | HTTP request | Description
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
+require_once 'constants.php'; // https://github.com/UltraCart/sdk_samples/blob/master/php/constants.php
 
-{{> php_doc_auth_partial}}
-$apiInstance = new {{invokerPackage}}\Api\{{classname}}(
-    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
-    // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client(){{#hasAuthMethods}},
-    $config{{/hasAuthMethods}}
-);
+// This example is based on our samples_sdk project, but still contains auto-generated content from our sdk generators.
+// As such, this might not be the best way to use this object.
+// Please see https://github.com/UltraCart/sdk_samples for working examples.
+
+$apiInstance = {{invokerPackage}}\Api\{{classname}}::usingApiKey(Constants::API_KEY, Constants::MAX_RETRY_SECONDS,
+            Constants::VERIFY_SSL, Constants::DEBUG);
+
 {{^vendorExtensions.x-group-parameters}}
 {{#allParams}}${{paramName}} = {{{example}}}; // {{{dataType}}}{{#description}} | {{{.}}}{{/description}}
 {{/allParams}}

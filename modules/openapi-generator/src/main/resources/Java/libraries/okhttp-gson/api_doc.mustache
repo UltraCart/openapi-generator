@@ -21,57 +21,34 @@ All URIs are relative to *{{basePath}}*
 
 ### Example
 ```java
-// Import classes:
-import {{{invokerPackage}}}.ApiClient;
-import {{{invokerPackage}}}.ApiException;
-import {{{invokerPackage}}}.Configuration;{{#hasAuthMethods}}
+// This example is based on our samples_sdk project, but still contains auto-generated content from our sdk generators.
+// As such, this might not be the best way to use this object.
+// Please see https://github.com/UltraCart/sdk_samples for working examples.
+
+// Import classes:{{#hasAuthMethods}}
+import {{{invokerPackage}}}.ApiClient;{{/hasAuthMethods}}
+import {{{invokerPackage}}}.ApiException;{{#hasAuthMethods}}
+import {{{invokerPackage}}}.Configuration;
 import {{{invokerPackage}}}.auth.*;{{/hasAuthMethods}}
-import {{{invokerPackage}}}.models.*;
 import {{{package}}}.{{{classname}}};
+import common.Constants; // https://github.com/UltraCart/sdk_samples/blob/master/java/src/common/Constants.java
+import common.JSON; // https://github.com/UltraCart/sdk_samples/blob/master/java/src/common/JSON.java
 
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("{{{basePath}}}");
-    {{#hasAuthMethods}}
-    {{#authMethods}}{{#isBasic}}{{#isBasicBasic}}
-    // Configure HTTP basic authorization: {{{name}}}
-    HttpBasicAuth {{{name}}} = (HttpBasicAuth) defaultClient.getAuthentication("{{{name}}}");
-    {{{name}}}.setUsername("YOUR USERNAME");
-    {{{name}}}.setPassword("YOUR PASSWORD");{{/isBasicBasic}}{{#isBasicBearer}}
-    // Configure HTTP bearer authorization: {{{name}}}
-    HttpBearerAuth {{{name}}} = (HttpBearerAuth) defaultClient.getAuthentication("{{{name}}}");
-    {{{name}}}.setBearerToken("BEARER TOKEN");{{/isBasicBearer}}{{/isBasic}}{{#isApiKey}}
-    // Configure API key authorization: {{{name}}}
-    ApiKeyAuth {{{name}}} = (ApiKeyAuth) defaultClient.getAuthentication("{{{name}}}");
-    {{{name}}}.setApiKey("YOUR API KEY");
-    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-    //{{{name}}}.setApiKeyPrefix("Token");{{/isApiKey}}{{#isOAuth}}
-    // Configure OAuth2 access token for authorization: {{{name}}}
-    OAuth {{{name}}} = (OAuth) defaultClient.getAuthentication("{{{name}}}");
-    {{{name}}}.setAccessToken("YOUR ACCESS TOKEN");{{/isOAuth}}
-    {{/authMethods}}
-    {{/hasAuthMethods}}
+// Create a Simple Key: https://ultracart.atlassian.net/wiki/spaces/ucdoc/pages/38688545/API+Simple+Key
+{{{classname}}} apiInstance = new {{{classname}}}(Constants.API_KEY, Constants.VERIFY_SSL_FLAG, Constants.DEBUG_MODE);
 
-    {{{classname}}} apiInstance = new {{{classname}}}(defaultClient);
-    {{#allParams}}
-    {{{dataType}}} {{{paramName}}} = {{{example}}}; // {{{dataType}}} | {{{description}}}
-    {{/allParams}}
-    try {
-      {{#returnType}}{{{.}}} result = {{/returnType}}apiInstance.{{{operationId}}}{{^vendorExtensions.x-group-parameters}}({{#allParams}}{{{paramName}}}{{^-last}}, {{/-last}}{{/allParams}});{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}({{#requiredParams}}{{{paramName}}}{{^-last}}, {{/-last}}{{/requiredParams}}){{#optionalParams}}
-            .{{{paramName}}}({{{paramName}}}){{/optionalParams}}
-            .execute();{{/vendorExtensions.x-group-parameters}}{{#returnType}}
-      System.out.println(result);{{/returnType}}
-    } catch (ApiException e) {
-      System.err.println("Exception when calling {{{classname}}}#{{{operationId}}}");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
+{{#allParams}}
+{{{dataType}}} {{{paramName}}} = {{{example}}}; // {{{dataType}}} | {{{description}}}
+{{/allParams}}
+try {
+    {{#returnType}}{{{returnType}}} result = {{/returnType}}apiInstance.{{{operationId}}}({{#allParams}}{{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/allParams}});{{#returnType}}
+    System.out.println(result);{{/returnType}}
+} catch (ApiException e) {
+    System.err.println("Exception when calling {{{classname}}}#{{{operationId}}}");
+    e.printStackTrace();
 }
 ```
+
 
 ### Parameters
 {{^allParams}}This endpoint does not need any parameter.{{/allParams}}{{#allParams}}{{#-last}}

@@ -23,11 +23,15 @@ Method | HTTP request | Description
 ### Example
 
 ```csharp
+
+// This example is based on our samples_sdk project, but still contains auto-generated content from our sdk generators.
+// As such, this might not be the best way to use this object.
+// Please see https://github.com/UltraCart/sdk_samples for working examples.
+
 using System.Collections.Generic;
 using System.Diagnostics;
-using {{packageName}}.{{apiPackage}};
-using {{packageName}}.Client;
-using {{packageName}}.{{modelPackage}};
+using com.ultracart.admin.v2.Api;
+using com.ultracart.admin.v2.Model;
 
 namespace Example
 {
@@ -35,34 +39,9 @@ namespace Example
     {
         public static void Main()
         {
-            Configuration.Default.BasePath = "{{{basePath}}}";
-            {{#hasAuthMethods}}
-            {{#authMethods}}
-            {{#isBasic}}
-            {{#isBasicBasic}}
-            // Configure HTTP basic authorization: {{{name}}}
-            Configuration.Default.Username = "YOUR_USERNAME";
-            Configuration.Default.Password = "YOUR_PASSWORD";
-            {{/isBasicBasic}}
-            {{#isBasicBearer}}
-            // Configure HTTP bearer authorization: {{{name}}}
-            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
-            {{/isBasicBearer}}
-            {{/isBasic}}
-            {{#isApiKey}}
-            // Configure API key authorization: {{{name}}}
-            Configuration.Default.AddApiKey("{{{keyParamName}}}", "YOUR_API_KEY");
-            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-            // Configuration.Default.AddApiKeyPrefix("{{{keyParamName}}}", "Bearer");
-            {{/isApiKey}}
-            {{#isOAuth}}
-            // Configure OAuth2 access token for authorization: {{{name}}}
-            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
-            {{/isOAuth}}
-            {{/authMethods}}
+            // Create a Simple Key: https://ultracart.atlassian.net/wiki/spaces/ucdoc/pages/38688545/API+Simple+Key
+            var api = new GiftCertificateApi(Constants.API_KEY); // Constants is a class from the sdk_samples project
 
-            {{/hasAuthMethods}}
-            var apiInstance = new {{classname}}(Configuration.Default);
             {{#allParams}}
             {{#isPrimitiveType}}
             var {{paramName}} = {{{example}}};  // {{{dataType}}} | {{{description}}}{{^required}} (optional) {{/required}}{{#defaultValue}} (default to {{{.}}}){{/defaultValue}}

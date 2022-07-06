@@ -28,24 +28,15 @@ All URIs are relative to *{{basePath}}*
 ```ruby
 require 'time'
 require '{{{gemName}}}'
-{{#hasAuthMethods}}
-# setup authorization
-{{{moduleName}}}.configure do |config|{{#authMethods}}{{#isBasic}}{{#isBasicBasic}}
-  # Configure HTTP basic authorization: {{{name}}}
-  config.username = 'YOUR USERNAME'
-  config.password = 'YOUR PASSWORD'{{/isBasicBasic}}{{#isBasicBearer}}
-  # Configure Bearer authorization{{#bearerFormat}} ({{{.}}}){{/bearerFormat}}: {{{name}}}
-  config.access_token = 'YOUR_BEARER_TOKEN'{{/isBasicBearer}}{{/isBasic}}{{#isApiKey}}
-  # Configure API key authorization: {{{name}}}
-  config.api_key['{{{name}}}'] = 'YOUR API KEY'
-  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
-  # config.api_key_prefix['{{{name}}}'] = 'Bearer'{{/isApiKey}}{{#isOAuth}}
-  # Configure OAuth2 access token for authorization: {{{name}}}
-  config.access_token = 'YOUR ACCESS TOKEN'{{/isOAuth}}
-{{/authMethods}}end
-{{/hasAuthMethods}}
+require 'json'
+require 'yaml'
+require_relative '../constants' # https://github.com/UltraCart/sdk_samples/blob/master/ruby/constants.rb
 
-api_instance = {{{moduleName}}}::{{{classname}}}.new
+# This example is based on our samples_sdk project, but still contains auto-generated content from our sdk generators.
+# As such, this might not be the best way to use this object.
+# Please see https://github.com/UltraCart/sdk_samples for working examples.
+
+api = {{{moduleName}}}::{{{classname}}}.new_using_api_key(Constants::API_KEY, Constants::VERIFY_SSL, Constants::DEBUG_MODE)
 {{^vendorExtensions.x-group-parameters}}
 {{#requiredParams}}
 {{{paramName}}} = {{{vendorExtensions.x-ruby-example}}} # {{{dataType}}} | {{{description}}}

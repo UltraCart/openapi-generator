@@ -23,39 +23,14 @@ Method | HTTP request | Description
 ### Example
 
 ```javascript
-import {{{moduleName}}} from '{{{projectName}}}';
-{{#hasAuthMethods}}
-let defaultClient = {{{moduleName}}}.ApiClient.instance;
-{{#authMethods}}
-{{#isBasic}}
-{{#isBasicBasic}}
-// Configure HTTP basic authorization: {{{name}}}
-let {{{name}}} = defaultClient.authentications['{{{name}}}'];
-{{{name}}}.username = 'YOUR USERNAME';
-{{{name}}}.password = 'YOUR PASSWORD';
-{{/isBasicBasic}}
-{{#isBasicBearer}}
-// Configure Bearer{{#bearerFormat}} ({{{.}}}){{/bearerFormat}} access token for authorization: {{{name}}}
-let {{{name}}} = defaultClient.authentications['{{{name}}}'];
-{{{name}}}.accessToken = "YOUR ACCESS TOKEN"
-{{/isBasicBearer}}
-{{/isBasic}}
-{{#isApiKey}}
-// Configure API key authorization: {{{name}}}
-let {{{name}}} = defaultClient.authentications['{{{name}}}'];
-{{{name}}}.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//{{{name}}}.apiKeyPrefix = 'Token';
-{{/isApiKey}}
-{{#isOAuth}}
-// Configure OAuth2 access token for authorization: {{{name}}}
-let {{{name}}} = defaultClient.authentications['{{{name}}}'];
-{{{name}}}.accessToken = 'YOUR ACCESS TOKEN';
-{{/isOAuth}}
-{{/authMethods}}
-{{/hasAuthMethods}}
+var ucApi = require('ultra_cart_rest_api_v2');
+const { apiClient } = require('../api.js'); // https://github.com/UltraCart/sdk_samples/blob/master/javascript/api.js
+let apiInstance = new ucApi.{{{classname}}}(apiClient);
 
-let apiInstance = new {{{moduleName}}}.{{{classname}}}();
+// This example is based on our samples_sdk project, but still contains auto-generated content from our sdk generators.
+// As such, this might not be the best way to use this object.
+// Please see https://github.com/UltraCart/sdk_samples for working examples.
+
 {{#requiredParams}}
 let {{{paramName}}} = {{{example}}}; // {{{dataType}}} | {{{description}}}
 {{/requiredParams}}
